@@ -1,6 +1,6 @@
 // services/api.js
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://your-backend-choreo-url.choreoapps.dev';
-// Remove the apiUrl line or use it properly
+// Use environment variable or hardcode your actual backend URL
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://your-actual-backend-url.choreoapps.dev';
 
 class ApiService {
   constructor() {
@@ -11,7 +11,7 @@ class ApiService {
     this.isRefreshing = false;
     this.failedQueue = [];
     
-    console.log('API Base URL:', this.baseURL);
+    console.log('🚀 API Service initialized with URL:', this.baseURL);
   }
 
   // Authentication methods
@@ -97,7 +97,11 @@ class ApiService {
 
   // Enhanced API request helper with token refresh
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}/api${endpoint}`;
+    // Ensure endpoint starts with /
+    const formattedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const url = `${this.baseURL}/api${formattedEndpoint}`;
+    
+    console.log(`🌐 Making API call to: ${url}`);
     
     const config = {
       headers: {
@@ -179,11 +183,11 @@ class ApiService {
 
       return await response.json();
     } catch (error) {
-      console.error(`API Request failed for ${endpoint}:`, error);
+      console.error(`❌ API Request failed for ${endpoint}:`, error);
       
       // Handle network errors
       if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        throw new Error('Network error. Please check your connection and ensure the backend server is running.');
+        throw new Error(`Network error. Cannot connect to backend at ${this.baseURL}`);
       }
       
       throw error;
@@ -244,6 +248,25 @@ class ApiService {
     return !!this.token && !!this.user;
   }
 
+  // Test backend connection
+  async testBackendConnection() {
+    try {
+      const response = await fetch(`${this.baseURL}/api/health/`);
+      return {
+        connected: response.ok,
+        backendUrl: this.baseURL,
+        status: response.status
+      };
+    } catch (error) {
+      return {
+        connected: false,
+        backendUrl: this.baseURL,
+        error: error.message
+      };
+    }
+  }
+
+  // ... rest of your methods remain the same
   // =====================
   // PARKING SLOTS ENDPOINTS - REAL DATA
   // =====================
@@ -404,67 +427,6 @@ class ApiService {
 
   async healthCheck() {
     return await this.request('/health/');
-  }
-
-  // =====================
-  // TEST DATA & UTILITIES
-  // =====================
-
-  async createTestSlots() {
-    return await this.request('/admin/test-slots/', {
-      method: 'POST'
-    });
-  }
-
-  // Test endpoint to check API connectivity
-  async testConnection() {
-    try {
-      const response = await fetch(`${this.baseURL}/api/health/`);
-      return {
-        success: response.ok,
-        status: response.status,
-        statusText: response.statusText
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message
-      };
-    }
-  }
-
-  // =====================
-  // URL GENERATORS (for components)
-  // =====================
-
-  getSlotImage(slotType) {
-    const images = {
-      'standard': '/images/standard-slot.jpg',
-      'premium': '/images/premium-slot.jpg',
-      'ev': '/images/ev-slot.jpg',
-      'handicap': '/images/handicap-slot.jpg'
-    };
-    return images[slotType] || images['standard'];
-  }
-
-  getSlotTypeColor(slotType) {
-    const colors = {
-      'standard': 'bg-blue-100 text-blue-800',
-      'premium': 'bg-green-100 text-green-800',
-      'ev': 'bg-purple-100 text-purple-800',
-      'handicap': 'bg-orange-100 text-orange-800'
-    };
-    return colors[slotType] || colors['standard'];
-  }
-
-  getStatusColor(status) {
-    const colors = {
-      'available': 'bg-green-100 text-green-800',
-      'occupied': 'bg-red-100 text-red-800',
-      'maintenance': 'bg-yellow-100 text-yellow-800',
-      'reserved': 'bg-blue-100 text-blue-800'
-    };
-    return colors[status] || colors['available'];
   }
 }
 
