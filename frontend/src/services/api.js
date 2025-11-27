@@ -1,8 +1,10 @@
 // services/api.js
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://your-backend-choreo-url.choreoapps.dev';
+// Remove the apiUrl line or use it properly
 
 class ApiService {
   constructor() {
+    // Use the choreo backend URL directly
     this.baseURL = API_BASE_URL;
     this.token = localStorage.getItem('authToken');
     this.user = JSON.parse(localStorage.getItem('user') || 'null');
