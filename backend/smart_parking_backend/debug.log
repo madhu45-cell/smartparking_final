@@ -1,0 +1,2 @@
+INFO 2025-11-26 16:31:25,185 autoreload 25631 8526815744 Watching for file changes with StatReloader
+INFO 2025-11-26 16:32:39,268 autoreload 25631 8526815744 /Users/madhusudan/Documents/final_madhu/smartparking_final/backend/smart_parking_backend/smart_parking_backend/settings.py changed, reloading.

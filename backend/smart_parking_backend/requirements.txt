@@ -1,0 +1,11 @@
+pip>=25.0
+setuptools>=70.0
+wheel>=0.44.0
+
+Django==4.2.7
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+psycopg2-binary==2.9.7
+Pillow==9.5.0
+gunicorn==21.2.0
+whitenoise==6.6.0
