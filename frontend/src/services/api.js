@@ -1,6 +1,6 @@
 // services/api.js
 // Use environment variable or hardcode your actual backend URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://your-actual-backend-url.choreoapps.dev';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://2b08404f-ce68-495f-a692-2ad356bf37fd-dev.e1-us-east-azure.choreoapis.dev/smartparking/smartparkingbackend/v1.0';
 
 class ApiService {
   constructor() {
